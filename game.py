@@ -2,6 +2,7 @@ import pygame
 from customer import Customer
 from glass import Glass
 from display import Display
+import random
 
 class Game:
     def __init__(self):  # init 好像是初始化
@@ -17,8 +18,9 @@ class Game:
 
     def check_order(self):
         if self.glass.is_correct(self.customer):
-            self.income += 114
+            self.income += self.customer.price  # random.randint(9, 30);
             return True
+        self.income -= 5  # 做错了倒扣
         return False
 
     def run(self):
