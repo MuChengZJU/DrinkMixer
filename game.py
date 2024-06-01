@@ -4,14 +4,14 @@ from glass import Glass
 from display import Display
 
 class Game:
-    def __init__(self):
+    def __init__(self):  # init 好像是初始化
         self.running = True
         self.income = 0
         self.customer = Customer()
         self.glass = Glass()
         self.display = Display(self)
 
-    def reset_game(self):
+    def reset_game(self):  # 重置游戏状态
         self.glass = Glass()
         self.customer = Customer()
 

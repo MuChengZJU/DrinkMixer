@@ -93,6 +93,7 @@ class Display:
         self.draw_customer_order()
         self.draw_reset_button()
         self.draw_income()
+        self.draw_state()
         pygame.display.flip()
 
     def draw_ingredients(self):
@@ -126,3 +127,8 @@ class Display:
         income_text = f"Income: {self.game.income}"
         income_surface = self.font.render(income_text, True, (0, 0, 0))
         self.screen.blit(income_surface, (50, 450))
+
+    def draw_state(self):
+        state_text = f"State: {self.game.glass.contents['base']}, {self.game.glass.contents['flavor']}, {self.game.glass.contents['extra']}"
+        state_surface = self.font.render(state_text, True, (0, 0, 0))
+        self.screen.blit(state_surface, (50, 500))
