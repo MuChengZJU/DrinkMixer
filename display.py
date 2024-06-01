@@ -48,6 +48,13 @@ class Display:
             else:
                 self.game.glass.clear()
 
+        #检查点击是否在杯子上
+        elif self.is_click_on_glass(x,y):
+            if self.game.check_order():
+                self.game.reset_game()
+            else:
+                self.game.glass.clear()
+
     def is_click_on_ingredient(self, x, y):
         # 检查点击是否在某个原料图标上
         ingredient_positions = {
