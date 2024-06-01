@@ -41,6 +41,12 @@ class Display:
         # 检查点击是否在重置按钮上
         elif self.is_click_on_reset_button(x, y):
             self.game.reset_game()
+        #检查点击是否在杯子上
+        elif self.is_click_on_glass(x,y):
+            if self.game.check_order():
+                self.game.reset_game()
+            else:
+                self.game.glass.clear()
 
     def is_click_on_ingredient(self, x, y):
         # 检查点击是否在某个原料图标上
@@ -82,6 +88,13 @@ class Display:
             return True
         return False
 
+    def is_click_on_glass(self, x, y):
+        # 检查点击是否在杯子上
+        # 假设重置按钮在 (400, 300) 到 (500, 400) 之间
+        if 400 <= x <= 500 and 300 <= y <= 400:
+            return True
+        return False
+
     def update(self):
         # 更新游戏状态
         pass
@@ -93,6 +106,7 @@ class Display:
         self.draw_customer_order()
         self.draw_reset_button()
         self.draw_income()
+        self.draw_state()
         pygame.display.flip()
 
     def draw_ingredients(self):
@@ -126,3 +140,8 @@ class Display:
         income_text = f"Income: {self.game.income}"
         income_surface = self.font.render(income_text, True, (0, 0, 0))
         self.screen.blit(income_surface, (50, 450))
+
+    def draw_state(self):
+        state_text = f"State: {self.game.glass.contents['base']}, {self.game.glass.contents['flavor']}, {self.game.glass.contents['extra']}"
+        state_surface = self.font.render(state_text, True, (0, 0, 0))
+        self.screen.blit(state_surface, (50, 500))

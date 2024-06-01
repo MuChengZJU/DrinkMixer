@@ -5,9 +5,9 @@ class Customer:
         self.order = self.generate_order()
 
     def generate_order(self):
-        bases = ["coffee", "soda"]
-        flavors = ["fruit", "gel", "mint"]
-        extras = ["milk", "tomato"]
+        bases = ["base_coffee", "base_soda"]
+        flavors = ["flavor_fruit", "flavor_gel", "flavor_mint"]
+        extras = ["extra_milk", "extra_tomato"]
         return {
             "base": random.choice(bases),
             "flavor": random.choice(flavors),
