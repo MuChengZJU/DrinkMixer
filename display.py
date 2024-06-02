@@ -129,7 +129,7 @@ class Display:
 
     def draw_customer_order(self):
         # 在屏幕上绘制顾客的饮品需求
-        order_text = f"Order: {self.game.customer.order['base']}, {self.game.customer.order['flavor']}, {self.game.customer.order['extra']}"
+        order_text = f"Order: {self.game.customer.order['base_adjective']}, {self.game.customer.order['flavor_adjective']}, {self.game.customer.order['extra_adjective']}"
         order_surface = self.font.render(order_text, True, (0, 0, 0))
         self.screen.blit(order_surface, (50, 400))
 
