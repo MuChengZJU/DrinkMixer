@@ -48,13 +48,6 @@ class Display:
             else:
                 self.game.glass.clear()
 
-        #检查点击是否在杯子上
-        elif self.is_click_on_glass(x,y):
-            if self.game.check_order():
-                self.game.reset_game()
-            else:
-                self.game.glass.clear()
-
     def is_click_on_ingredient(self, x, y):
         # 检查点击是否在某个原料图标上
         ingredient_positions = {
@@ -90,14 +83,12 @@ class Display:
 
     def is_click_on_reset_button(self, x, y):
         # 检查点击是否在重置按钮上
-        # 假设重置按钮在 (700, 500) 到 (750, 550) 之间
         if 700 <= x <= 750 and 500 <= y <= 550:
             return True
         return False
 
     def is_click_on_glass(self, x, y):
         # 检查点击是否在杯子上
-        # 假设重置按钮在 (400, 300) 到 (500, 400) 之间
         if 400 <= x <= 500 and 300 <= y <= 400:
             return True
         return False

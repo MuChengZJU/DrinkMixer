@@ -5,11 +5,13 @@ from display import Display
 import random
 
 class Game:
-    def __init__(self):  # init 好像是初始化
+    def __init__(self):
         self.running = True
         self.income = 0
         self.customer = Customer()
         self.glass = Glass()
+        pygame.display.set_caption("Drink Mixer")  # 设置窗口标题
+        self.clock = pygame.time.Clock()  # 创建一个Clock对象
         self.display = Display(self)
 
     def reset_game(self):  # 重置游戏状态
@@ -28,6 +30,7 @@ class Game:
             self.display.handle_events()
             self.display.update()
             self.display.render()
+            self.clock.tick(60)  # 设置帧率为60 FPS
         pygame.quit()
 
 if __name__ == "__main__":
