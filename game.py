@@ -4,9 +4,11 @@ from glass import Glass
 from sound import SoundManager
 from display import Display
 import random
+from sound import SoundManager
 
 class Game:
     def __init__(self):
+        self.sound = SoundManager()
         self.running = True
         self.income = 0
         self.customers = []
@@ -23,6 +25,8 @@ class Game:
         self.glass = Glass()
         self.i += 1
         self.customer = self.customers[self.i]
+        self.sound.play_sound("klee") #TODO:客户名
+
 
     def reset_glass(self):  # 重置杯子状态
         self.glass = Glass()
