@@ -83,7 +83,7 @@ class Display:
             self.game.running = False
         # 检查点击是否在重置按钮上
         elif self.element_positions['buttons']['reset_button'].collidepoint(x, y):
-            self.game.reset_game()
+            self.game.reset_glass()
         # 检查点击是否在某个原料图标上
         elif self.is_click_on_ingredient(x, y):
             ingredient = self.get_clicked_ingredient(x, y)
