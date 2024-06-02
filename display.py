@@ -9,20 +9,20 @@ class Display:
         self.font = pygame.font.Font('assets/fonts/HYWenHei-85W.ttf', 20)
         self.quit_button_rect = pygame.Rect(700, 0, 100, 40)  # 定义退出按钮的位置和大小
         self.ingredient_positions = {
-            'base_coffee': (125, 300),
-            'base_soda': (125, 400),
-            'flavor_fruit': (225, 225),
-            'flavor_gel': (350, 225),
-            'flavor_mint': (475, 225),
-            'extra_milk': (600, 300),
-            'extra_tomato': (600, 400)
+            'base_coffee': (0, 350),
+            'base_soda': (100, 350),
+            'flavor_fruit': (200, 380),
+            'flavor_gel': (325, 380),
+            'flavor_mint': (450, 380),
+            'extra_milk': (550, 350),
+            'extra_tomato': (650, 350)
         }
 
     def load_assets(self):
         self.images = {}
 
         # 加载背景图
-        self.background = pygame.image.load('assets/images/table.png')
+        self.background = pygame.image.load('assets/images/backgound.jpeg')
         # 获取窗口尺寸
         window_size = self.screen.get_size()
         # 调整背景图大小以适应窗口
@@ -98,7 +98,7 @@ class Display:
 
     def render(self):
         self.screen.fill((255, 255, 255))
-        self.screen.blit(self.background, (0, 80))
+        self.screen.blit(self.background, (0, 0))
         self.draw_ingredients()
         self.draw_mixing_cup()
         self.draw_customer_order()
@@ -119,7 +119,7 @@ class Display:
     def draw_customer_order(self):
         order_text = f"Order: {self.game.customer.order['base']}, {self.game.customer.order['flavor']}, {self.game.customer.order['extra']}"
         order_surface = self.font.render(order_text, True, (0, 0, 0))
-        self.screen.blit(order_surface, (50, 400))
+        self.screen.blit(order_surface, (50, 40))
 
     def draw_reset_button(self):
         self.screen.blit(self.images['redo_button'], (700, 500))
@@ -127,12 +127,12 @@ class Display:
     def draw_income(self):
         income_text = f"Income: {self.game.income}"
         income_surface = self.font.render(income_text, True, (0, 0, 0))
-        self.screen.blit(income_surface, (50, 450))
+        self.screen.blit(income_surface, (50, 60))
 
     def draw_state(self):
         state_text = f"State: {self.game.glass.contents['base']}, {self.game.glass.contents['flavor']}, {self.game.glass.contents['extra']}"
         state_surface = self.font.render(state_text, True, (0, 0, 0))
-        self.screen.blit(state_surface, (50, 500))
+        self.screen.blit(state_surface, (50, 80))
 
     def draw_quit_button(self):
         pygame.draw.rect(self.screen, (255, 246, 218), self.quit_button_rect)
