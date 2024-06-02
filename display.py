@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-
+from sound import SoundManager
 
 class Display:
     def __init__(self, game):
@@ -8,6 +8,7 @@ class Display:
         self.screen = pygame.display.set_mode((800, 600))
         self.load_assets()
         self.font = pygame.font.Font('assets/fonts/HYWenHei-85W.ttf', 20)
+        self.sound = SoundManager()
 
         # 定义所有可交互元素的位置
         self.element_positions = {
@@ -110,6 +111,8 @@ class Display:
         elif self.is_click_on_ingredient(x, y):
             ingredient = self.get_clicked_ingredient(x, y)
             self.game.glass.add_ingredient(ingredient['type'], ingredient['name'])
+            # 播放音效
+            self.sound.play_sound(ingredient['name'])
         # 检查点击是否在杯子上
         elif self.element_positions['buttons']['mixing_cup'].collidepoint(x, y):
             if self.game.check_order():

@@ -1,11 +1,35 @@
 import pygame
 
-class Sound:
+class SoundManager:
     def __init__(self):
+        pygame.mixer.init()
+        self.sounds = {}
+
+        # 加载音效文件
         self.load_sounds()
-        self.background_music.play()
+
+        # 加载并播放背景音乐
+        self.play_background_music('assets/sounds/background_music.mp3')
 
     def load_sounds(self):
-        self.background_music = pygame.mixer.Sound('assets/sound/background_music.mp3')  # 加载背景音乐
-        self.sound_click1 = pygame.mixer.Sound('assets/sound/click_sound1.mp3')  # 加载点击音效
-        self.sound_click2 = pygame.mixer.Sound('assets/sound/click_sound2.mp3')
+        sound_files = {
+            "base_coffee": 'assets/sounds/base_coffee.wav',
+            "base_soda": 'assets/sounds/base_soda.mp3',
+            "extra_milk": 'assets/sounds/extra_milk.wav',
+            "extra_tomato": 'assets/sounds/extra_tomato.wav',
+            "flavor_fruit": 'assets/sounds/flavor_fruit.mp3',
+            "flavor_gel": 'assets/sounds/flavor_gel.wav',
+            "flavor_mint": 'assets/sounds/flavor_mint.mp3'
+        }
+
+        for name, path in sound_files.items():
+            sound = pygame.mixer.Sound(path)
+            self.sounds[name] = sound
+
+    def play_sound(self, name):
+        if name in self.sounds:
+            self.sounds[name].play()
+
+    def play_background_music(self, path):
+        pygame.mixer.music.load(path)
+        pygame.mixer.music.play(-1)  # -1 表示无限循环播放

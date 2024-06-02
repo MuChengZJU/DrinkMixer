@@ -1,7 +1,7 @@
 import pygame
 from customer import Customer
 from glass import Glass
-from sound import Sound
+from sound import SoundManager
 from display import Display
 import random
 
@@ -11,7 +11,6 @@ class Game:
         self.income = 0
         self.customers = []
         self.glass = Glass()
-        self.sound = Sound()
         pygame.display.set_caption("Drink Mixer")  # 设置窗口标题
         self.clock = pygame.time.Clock()  # 创建一个Clock对象
         self.display = Display(self)
