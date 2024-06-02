@@ -16,7 +16,7 @@ class Game:
 
     def reset_game(self):  # 重置游戏状态
         self.glass = Glass()
-        self.customer = Customer()
+        # self.customer = Customer()
 
     def check_order(self):
         if self.glass.is_correct(self.customer):
