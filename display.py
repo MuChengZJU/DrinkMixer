@@ -9,13 +9,13 @@ class Display:
         self.font = pygame.font.Font('assets/fonts/HYWenHei-85W.ttf', 20)
         self.quit_button_rect = pygame.Rect(700, 0, 100, 40)  # 定义退出按钮的位置和大小
         self.ingredient_positions = {
-            'base_coffee': (50, 50),
-            'base_soda': (150, 50),
-            'flavor_fruit': (50, 150),
-            'flavor_gel': (150, 150),
-            'flavor_mint': (250, 150),
-            'extra_milk': (50, 250),
-            'extra_tomato': (150, 250)
+            'base_coffee': (125, 300),
+            'base_soda': (125, 400),
+            'flavor_fruit': (225, 225),
+            'flavor_gel': (350, 225),
+            'flavor_mint': (475, 225),
+            'extra_milk': (600, 300),
+            'extra_tomato': (600, 400)
         }
 
     def load_assets(self):
@@ -40,7 +40,7 @@ class Display:
             "redo_button": 'assets/images/redo_button.png'
         }.items():
             image = pygame.image.load(path)
-            self.images[name] = pygame.transform.scale(image, (100, 100))
+            self.images[name] = pygame.transform.scale(image, (125, 125))
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -114,7 +114,7 @@ class Display:
             self.screen.blit(self.images[name], (ix, iy))
 
     def draw_mixing_cup(self):
-        self.screen.blit(self.images['mixing_cup'], (400, 300))
+        self.screen.blit(self.images['mixing_cup'], (350, 350))
 
     def draw_customer_order(self):
         order_text = f"Order: {self.game.customer.order['base']}, {self.game.customer.order['flavor']}, {self.game.customer.order['extra']}"
