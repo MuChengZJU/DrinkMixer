@@ -2,18 +2,36 @@ import random
 
 class Customer:
     def __init__(self):
+        self.ingredients = {
+            "base": {
+                "base_coffee": ["香浓", "苦味", "提神", "醇厚"],
+                "base_soda": ["清新", "爽口", "刺激", "解渴", "轻盈"]
+            },
+            "flavor": {
+                "flavor_fruit": ["多汁",  "果香", "新鲜", "营养丰富"],
+                "flavor_gel": ["软滑", "粘性", "弹性", "有趣", "多彩"],
+                "flavor_mint": ["清凉", "提神", "清新", "舒缓", "带有轻微的辛辣感"]
+            },
+            "extra": {
+                "extra_milk": [ "香甜", "顺滑", "营养丰富", "奶香"],
+                "extra_tomato": ["酸甜浓郁", "粘稠", "奇特创新"]
+            }
+        }
         self.order = self.generate_order()
         self.price = self.calculate_price()
 
     def generate_order(self):
-        bases = ["base_coffee", "base_soda"]
-        flavors = ["flavor_fruit", "flavor_gel", "flavor_mint"]
-        extras = ["extra_milk", "extra_tomato"]
-        return {
-            "base": random.choice(bases),
-            "flavor": random.choice(flavors),
-            "extra": random.choice(extras)
+        order = {
+            "base": random.choice(list(self.ingredients["base"].keys())),
+            "flavor": random.choice(list(self.ingredients["flavor"].keys())),
+            "extra": random.choice(list(self.ingredients["extra"].keys()))
         }
+        # 随机选择形容词
+        order["base_adjective"] = random.choice(self.ingredients["base"][order["base"]])
+        order["flavor_adjective"] = random.choice(self.ingredients["flavor"][order["flavor"]])
+        order["extra_adjective"] = random.choice(self.ingredients["extra"][order["extra"]])
+        return order
+
     def calculate_price(self):
         price = 0
         if self.order["base"] == "base_coffee":price += 5
