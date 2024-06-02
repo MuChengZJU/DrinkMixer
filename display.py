@@ -206,10 +206,6 @@ class Display:
             elif self.game.glass.contents['extra'] == 'extra_tomato':
                 self.screen.blit(self.images['icon_extra_tomato'], extra_pos)
 
-        state_text = f"State: {self.game.glass.contents['base']}, {self.game.glass.contents['flavor']}, {self.game.glass.contents['extra']}"
-        state_surface = self.font.render(state_text, True, (0, 0, 0))
-        self.screen.blit(state_surface, (50, 80))
-
     def draw_quit_button(self):
         pos = self.element_positions['buttons']['quit_button']
         pygame.draw.rect(self.screen, (255, 246, 218), pos)
