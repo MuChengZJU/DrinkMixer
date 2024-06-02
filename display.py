@@ -13,7 +13,7 @@ class Display:
         self.element_positions = {
             'buttons': {
                 'quit_button': pygame.Rect(700, 0, 100, 40),
-                'reset_button': pygame.Rect(700, 100, 70, 70),
+                'redo_button': pygame.Rect(450, 320, 70, 70),
                 'mixing_cup': pygame.Rect(300, 280, 175, 175)
             },
             'ingredients': {
@@ -26,7 +26,8 @@ class Display:
                 'extra_tomato': (650, 400)
             },
             'status':{
-                'glass_content': (230, 310)
+                'glass_content': (230, 310),
+                'income': (600, 50)
             }
         }
 
@@ -37,15 +38,15 @@ class Display:
             'flavor_fruit': '水果味',
             'flavor_gel': '果冻味',
             'flavor_mint': '薄荷味',
-            'extra_milk': '额外牛奶',
-            'extra_tomato': '额外番茄'
+            'extra_milk': '牛奶',
+            'extra_tomato': '番茄'
         }
 
     def load_assets(self):
         self.images = {}
 
         # 加载背景图
-        self.background = pygame.image.load('assets/images/backgound.jpeg')
+        self.background = pygame.image.load('assets/images/background.jpeg')
         # 获取窗口尺寸
         window_size = self.screen.get_size()
         # 调整背景图大小以适应窗口
@@ -60,10 +61,11 @@ class Display:
             "flavor_mint": 'assets/images/ingredients/flavor_mint.png',
             "extra_milk": 'assets/images/ingredients/extra_milk.png',
             "extra_tomato": 'assets/images/ingredients/extra_tomato.png',
-            # buttons
+            # others
             "mixing_cup": 'assets/images/mixing_cup.png',
             "redo_button": 'assets/images/redo_button.png',
             "glass_content": "assets/images/glass_content.png",
+            "income": "assets/images/income.png",
             # icons
             "icon_base_coffee": 'assets/images/icons/icon_base_coffee.png',
             "icon_base_soda": 'assets/images/icons/icon_base_soda.png',
@@ -79,10 +81,13 @@ class Display:
                 self.images[name] = pygame.transform.scale(image, (175, 175))
             elif name == "redo_button":
                 # 调整redo_button图像大小
-                self.images[name] = pygame.transform.scale(image, (70, 70))
+                self.images[name] = pygame.transform.scale(image, (60, 60))
             elif name.startswith('icon'):
                 # 调整icon图像大小
                 self.images[name] = pygame.transform.scale(image, (30, 30))
+            elif name == "income":
+                # 调整收入板图像大小
+                self.images[name] = pygame.transform.scale(image, (200, 100))
             else:
                 self.images[name] = pygame.transform.scale(image, (125, 125))
 
@@ -99,8 +104,8 @@ class Display:
         if self.element_positions['buttons']['quit_button'].collidepoint(x, y):
             self.game.running = False
         # 检查点击是否在重置按钮上
-        elif self.element_positions['buttons']['reset_button'].collidepoint(x, y):
-            self.game.reset_glass()
+        elif self.element_positions['buttons']['redo_button'].collidepoint(x, y):
+            self.game.reset_game()
         # 检查点击是否在某个原料图标上
         elif self.is_click_on_ingredient(x, y):
             ingredient = self.get_clicked_ingredient(x, y)
@@ -136,7 +141,7 @@ class Display:
         self.draw_ingredients()
         self.draw_mixing_cup()
         self.draw_customer_order()
-        self.draw_reset_button()
+        self.draw_redo_button()
         self.draw_income()
         self.draw_state()
         self.draw_quit_button()
@@ -164,14 +169,37 @@ class Display:
         order_surface = self.font.render(order_text, True, (0, 0, 0))
         self.screen.blit(order_surface, (50, 40))
 
-    def draw_reset_button(self):
-        pos = self.element_positions['buttons']['reset_button']
+    def draw_redo_button(self):
+        pos = self.element_positions['buttons']['redo_button']
         self.screen.blit(self.images['redo_button'], (pos.x, pos.y))
+        redo_text = self.font.render("重做这杯", True, (168, 128, 79))
+        text_rect = redo_text.get_rect(center=(pos.centerx, pos.centery + pos.height / 2))
+        self.screen.blit(redo_text, text_rect)
+        redo_text = self.font.render("重做这杯", True, (255, 246, 218))
+        text_rect.x -= 2
+        text_rect.y -= 2
+        self.screen.blit(redo_text, text_rect)
 
     def draw_income(self):
-        income_text = f"Income: {self.game.income}"
-        income_surface = self.font.render(income_text, True, (0, 0, 0))
-        self.screen.blit(income_surface, (50, 60))
+        # 绘制收入板
+        self.screen.blit(self.images['income'], self.element_positions['status']['income'])
+        # 绘制收入文本
+        income_line1 = f"收入"
+        income_line2 = f"{self.game.income} 信用点"
+
+        income_surface1 = self.font.render(income_line1, True, (255, 246, 218))
+        income_text_pos1 = list(self.element_positions['status']['income'])
+        income_text_pos1[0] += 85
+        income_text_pos1[1] += 25
+        income_text_pos1 = tuple(income_text_pos1)
+        self.screen.blit(income_surface1, income_text_pos1)
+
+        income_surface2 = self.font.render(income_line2, True, (255, 246, 218))
+        income_text_pos2 = list(self.element_positions['status']['income'])
+        income_text_pos2[0] += 70
+        income_text_pos2[1] += 56  # 第二行文本的高度为30
+        income_text_pos2 = tuple(income_text_pos2)
+        self.screen.blit(income_surface2, income_text_pos2)
 
     def draw_state(self):
         # 绘制杯子的里的原料
@@ -194,7 +222,7 @@ class Display:
                 self.screen.blit(self.images['icon_flavor_fruit'], flavor_pos)
             elif self.game.glass.contents['flavor'] == 'flavor_gel':
                 self.screen.blit(self.images['icon_flavor_gel'], flavor_pos)
-            elif self.game.glass.contents['flavor']== 'flavor_mint':
+            elif self.game.glass.contents['flavor'] == 'flavor_mint':
                 self.screen.blit(self.images['icon_flavor_mint'], flavor_pos)
         if self.game.glass.contents['extra'] is not None:
             extra_pos = list(self.element_positions['status']['glass_content'])
@@ -205,10 +233,6 @@ class Display:
                 self.screen.blit(self.images['icon_extra_milk'], extra_pos)
             elif self.game.glass.contents['extra'] == 'extra_tomato':
                 self.screen.blit(self.images['icon_extra_tomato'], extra_pos)
-
-        state_text = f"State: {self.game.glass.contents['base']}, {self.game.glass.contents['flavor']}, {self.game.glass.contents['extra']}"
-        state_surface = self.font.render(state_text, True, (0, 0, 0))
-        self.screen.blit(state_surface, (50, 80))
 
     def draw_quit_button(self):
         pos = self.element_positions['buttons']['quit_button']
