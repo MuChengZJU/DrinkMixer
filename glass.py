@@ -3,8 +3,9 @@ class Glass:
         self.contents = {"base": None, "flavor": None, "extra": None}
 
     def add_ingredient(self, type, ingredient):
-        if type in self.contents:
-            self.contents[type] = ingredient
+        if self.contents[type] == None:
+             if type in self.contents:
+                 self.contents[type] = ingredient
 
     def clear(self):
         self.contents = {"base": None, "flavor": None, "extra": None}
