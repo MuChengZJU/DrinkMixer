@@ -256,7 +256,7 @@ class Display:
         y_offset = 0
         for customer in self.game.customers[:5]:  # 只绘制列表中的前5个客户的订单
             order_text = f"{customer.order['base_adjective']}, {customer.order['flavor_adjective']}, {customer.order['extra_adjective']}"
-            order_surface = self.font.render(order_text, True, (0, 0, 0))
+            order_surface = self.font.render(order_text, True, (255, 246, 218))
             self.screen.blit(order_surface, (
             self.element_positions['order_queue'][0], self.element_positions['order_queue'][1] + y_offset))
             y_offset += 30  # 每个订单之间的间隔
@@ -266,7 +266,7 @@ class Display:
         self.screen.blit(self.images['klee'], self.element_positions['klee'])
         # 绘制客户订单
         order_text = f"可莉想要{self.game.customer.order['base_adjective']}的, {self.game.customer.order['flavor_adjective']}的, {self.game.customer.order['extra_adjective']}的饮料！"
-        order_surface = self.font.render(order_text, True, (0, 0, 0))
+        order_surface = self.font.render(order_text, True, (255, 246, 218))
         self.screen.blit(order_surface, (
         self.element_positions['klee'][0] + 50, 50))  # 在照片上方显示订单
         # TODO: 客户变量
