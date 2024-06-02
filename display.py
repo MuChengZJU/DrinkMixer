@@ -11,6 +11,14 @@ class Display:
 
     def load_assets(self):
         self.images = {}
+
+        # 加载背景图
+        self.background = pygame.image.load('assets/images/table.png')
+        # 获取窗口尺寸
+        window_size = self.screen.get_size()
+        # 调整背景图大小以适应窗口
+        self.background = pygame.transform.scale(self.background, window_size)
+
         for name, path in {
             "base_coffee": 'assets/images/base_coffee.png',
             "base_soda": 'assets/images/base_soda.png',
@@ -102,6 +110,7 @@ class Display:
 
     def render(self):
         self.screen.fill((255, 255, 255))
+        self.screen.blit(self.background, (0, 0))
         self.draw_ingredients()
         self.draw_mixing_cup()
         self.draw_customer_order()
