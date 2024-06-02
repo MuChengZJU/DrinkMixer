@@ -24,6 +24,9 @@ class Display:
                 'flavor_mint': (450, 430),
                 'extra_milk': (550, 400),
                 'extra_tomato': (650, 400)
+            },
+            'status':{
+                'glass_content': (230, 310)
             }
         }
 
@@ -49,15 +52,26 @@ class Display:
         self.background = pygame.transform.scale(self.background, window_size)
 
         for name, path in {
-            "base_coffee": 'assets/images/base_coffee.png',
-            "base_soda": 'assets/images/base_soda.png',
-            "flavor_fruit": 'assets/images/flavor_fruit.png',
-            "flavor_gel": 'assets/images/flavor_gel.png',
-            "flavor_mint": 'assets/images/flavor_mint.png',
-            "extra_milk": 'assets/images/extra_milk.png',
-            "extra_tomato": 'assets/images/extra_tomato.png',
+            # ingredients
+            "base_coffee": 'assets/images/ingredients/base_coffee.png',
+            "base_soda": 'assets/images/ingredients/base_soda.png',
+            "flavor_fruit": 'assets/images/ingredients/flavor_fruit.png',
+            "flavor_gel": 'assets/images/ingredients/flavor_gel.png',
+            "flavor_mint": 'assets/images/ingredients/flavor_mint.png',
+            "extra_milk": 'assets/images/ingredients/extra_milk.png',
+            "extra_tomato": 'assets/images/ingredients/extra_tomato.png',
+            # buttons
             "mixing_cup": 'assets/images/mixing_cup.png',
-            "redo_button": 'assets/images/redo_button.png'
+            "redo_button": 'assets/images/redo_button.png',
+            "glass_content": "assets/images/glass_content.png",
+            # icons
+            "icon_base_coffee": 'assets/images/icons/icon_base_coffee.png',
+            "icon_base_soda": 'assets/images/icons/icon_base_soda.png',
+            "icon_flavor_fruit": 'assets/images/icons/icon_flavor_fruit.png',
+            "icon_flavor_gel": 'assets/images/icons/icon_flavor_gel.png',
+            "icon_flavor_mint": 'assets/images/icons/icon_flavor_mint.png',
+            "icon_extra_milk": 'assets/images/icons/icon_extra_milk.png',
+            "icon_extra_tomato": 'assets/images/icons/icon_extra_tomato.png',
         }.items():
             image = pygame.image.load(path)
             if name == "mixing_cup":
@@ -66,6 +80,9 @@ class Display:
             elif name == "redo_button":
                 # 调整redo_button图像大小
                 self.images[name] = pygame.transform.scale(image, (70, 70))
+            elif name.startswith('icon'):
+                # 调整icon图像大小
+                self.images[name] = pygame.transform.scale(image, (30, 30))
             else:
                 self.images[name] = pygame.transform.scale(image, (125, 125))
 
@@ -157,6 +174,38 @@ class Display:
         self.screen.blit(income_surface, (50, 60))
 
     def draw_state(self):
+        # 绘制杯子的里的原料
+        self.screen.blit(self.images['glass_content'], self.element_positions['status']['glass_content'])
+        if self.game.glass.contents['base'] is not None:
+            base_pos = list(self.element_positions['status']['glass_content'])
+            base_pos[0] += 45
+            base_pos[1] += 10
+            base_pos = tuple(base_pos)
+            if self.game.glass.contents['base'] == 'base_coffee':
+                self.screen.blit(self.images['icon_base_coffee'], base_pos)
+            elif self.game.glass.contents['base'] == 'base_soda':
+                self.screen.blit(self.images['icon_base_soda'], base_pos)
+        if self.game.glass.contents['flavor'] is not None:
+            flavor_pos = list(self.element_positions['status']['glass_content'])
+            flavor_pos[0] += 45
+            flavor_pos[1] += 50
+            flavor_pos = tuple(flavor_pos)
+            if self.game.glass.contents['flavor'] == 'flavor_fruit':
+                self.screen.blit(self.images['icon_flavor_fruit'], flavor_pos)
+            elif self.game.glass.contents['flavor'] == 'flavor_gel':
+                self.screen.blit(self.images['icon_flavor_gel'], flavor_pos)
+            elif self.game.glass.contents['flavor']== 'flavor_mint':
+                self.screen.blit(self.images['icon_flavor_mint'], flavor_pos)
+        if self.game.glass.contents['extra'] is not None:
+            extra_pos = list(self.element_positions['status']['glass_content'])
+            extra_pos[0] += 45
+            extra_pos[1] += 90
+            extra_pos = tuple(extra_pos)
+            if self.game.glass.contents['extra'] == 'extra_milk':
+                self.screen.blit(self.images['icon_extra_milk'], extra_pos)
+            elif self.game.glass.contents['extra'] == 'extra_tomato':
+                self.screen.blit(self.images['icon_extra_tomato'], extra_pos)
+
         state_text = f"State: {self.game.glass.contents['base']}, {self.game.glass.contents['flavor']}, {self.game.glass.contents['extra']}"
         state_surface = self.font.render(state_text, True, (0, 0, 0))
         self.screen.blit(state_surface, (50, 80))
