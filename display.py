@@ -6,7 +6,8 @@ class Display:
         self.game = game
         self.screen = pygame.display.set_mode((800, 600))
         self.load_assets()
-        self.font = pygame.font.SysFont('assets/fonts/HYWenHei-85W.ttf', 36)
+        self.font = pygame.font.Font('assets/fonts/HYWenHei-85W.ttf', 20)
+        self.quit_button_rect = pygame.Rect(700, 0, 100, 40)  # 定义退出按钮的位置和大小
 
     def load_assets(self):
         self.images = {}
@@ -32,17 +33,19 @@ class Display:
                 self.handle_click(event.pos)
 
     def handle_click(self, pos):
-        # 在这里添加逻辑处理点击事件
         x, y = pos
+        # 检查点击是否在退出按钮上
+        if self.quit_button_rect.collidepoint(x, y):
+            self.game.running = False
         # 检查点击是否在某个原料图标上
-        if self.is_click_on_ingredient(x, y):
+        elif self.is_click_on_ingredient(x, y):
             ingredient = self.get_clicked_ingredient(x, y)
             self.game.glass.add_ingredient(ingredient['type'], ingredient['name'])
         # 检查点击是否在重置按钮上
         elif self.is_click_on_reset_button(x, y):
             self.game.reset_game()
-        #检查点击是否在杯子上
-        elif self.is_click_on_glass(x,y):
+        # 检查点击是否在杯子上
+        elif self.is_click_on_glass(x, y):
             if self.game.check_order():
                 self.game.reset_game()
             else:
@@ -105,6 +108,7 @@ class Display:
         self.draw_reset_button()
         self.draw_income()
         self.draw_state()
+        self.draw_quit_button()  # 绘制退出按钮
         pygame.display.flip()
 
     def draw_ingredients(self):
@@ -140,6 +144,14 @@ class Display:
         self.screen.blit(income_surface, (50, 450))
 
     def draw_state(self):
+        # 在屏幕上绘制当前状态
         state_text = f"State: {self.game.glass.contents['base']}, {self.game.glass.contents['flavor']}, {self.game.glass.contents['extra']}"
         state_surface = self.font.render(state_text, True, (0, 0, 0))
         self.screen.blit(state_surface, (50, 500))
+
+    def draw_quit_button(self):
+        # 绘制退出按钮
+        pygame.draw.rect(self.screen, (255, 246, 218), self.quit_button_rect)
+        quit_text = self.font.render("退出游戏", True, (168, 128, 79))
+        text_rect = quit_text.get_rect(center=self.quit_button_rect.center)
+        self.screen.blit(quit_text, text_rect)
