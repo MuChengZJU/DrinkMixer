@@ -14,17 +14,28 @@ class Display:
             'buttons': {
                 'quit_button': pygame.Rect(700, 0, 100, 40),
                 'reset_button': pygame.Rect(700, 100, 70, 70),
-                'mixing_cup': pygame.Rect(350, 200, 175, 175)
+                'mixing_cup': pygame.Rect(300, 280, 175, 175)
             },
             'ingredients': {
-                'base_coffee': (0, 350),
-                'base_soda': (100, 350),
-                'flavor_fruit': (200, 380),
-                'flavor_gel': (325, 380),
-                'flavor_mint': (450, 380),
-                'extra_milk': (550, 350),
-                'extra_tomato': (650, 350)
+                'base_coffee': (0, 400),
+                'base_soda': (100, 400),
+                'flavor_fruit': (200, 430),
+                'flavor_gel': (325, 430),
+                'flavor_mint': (450, 430),
+                'extra_milk': (550, 400),
+                'extra_tomato': (650, 400)
             }
+        }
+
+        # 定义变量名到中文名称的映射
+        self.ingredient_names = {
+            'base_coffee': '咖啡基底',
+            'base_soda': '苏打基底',
+            'flavor_fruit': '水果味',
+            'flavor_gel': '果冻味',
+            'flavor_mint': '薄荷味',
+            'extra_milk': '额外牛奶',
+            'extra_tomato': '额外番茄'
         }
 
     def load_assets(self):
@@ -115,9 +126,16 @@ class Display:
         pygame.display.flip()
 
     def draw_ingredients(self):
-        # 在屏幕上绘制可选择的原料
+        # 在屏幕上绘制可选择的原料及其名称
         for name, (ix, iy) in self.element_positions['ingredients'].items():
+            # 绘制原料图标
             self.screen.blit(self.images[name], (ix, iy))
+
+            # 获取中文名称
+            ingredient_label = self.ingredient_names.get(name, name)
+            label_surface = self.font.render(ingredient_label, True, (255, 255, 255))
+            label_rect = label_surface.get_rect(center=(ix + 62.5, 550))  # 图标中心下方
+            self.screen.blit(label_surface, label_rect)
 
     def draw_mixing_cup(self):
         pos = self.element_positions['buttons']['mixing_cup']
