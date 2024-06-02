@@ -254,7 +254,7 @@ class Display:
 
     def draw_order_queue(self):
         y_offset = 0
-        for customer in self.game.customers:
+        for customer in self.game.customers[:5]:  # 只绘制列表中的前5个客户的订单
             order_text = f"{customer.order['base_adjective']}, {customer.order['flavor_adjective']}, {customer.order['extra_adjective']}"
             order_surface = self.font.render(order_text, True, (0, 0, 0))
             self.screen.blit(order_surface, (
