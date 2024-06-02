@@ -1,7 +1,6 @@
 import pygame
 from pygame.locals import *
 from sound import SoundManager
-
 class Display:
     def __init__(self, game):
         self.game = game
@@ -43,6 +42,10 @@ class Display:
             'extra_tomato': '番茄'
         }
 
+        # 订单队列和客户
+        self.element_positions['order_queue'] = (600, 200)  # 队列起始位置
+        self.element_positions['klee'] = (0, 100)  # 客户照片位置
+
     def load_assets(self):
         self.images = {}
 
@@ -75,6 +78,13 @@ class Display:
             "icon_flavor_mint": 'assets/images/icons/icon_flavor_mint.png',
             "icon_extra_milk": 'assets/images/icons/icon_extra_milk.png',
             "icon_extra_tomato": 'assets/images/icons/icon_extra_tomato.png',
+            # customers
+            "klee": "assets/images/customers/klee.png",
+            "frieren": "assets/images/customers/frieren.png",
+            "furina": "assets/images/customers/furina.png",
+            "klee": "assets/images/customers/klee.png",
+            "nwlt": "assets/images/customers/nwlt.png",
+            "violet": "assets/images/customers/violet.png"
         }.items():
             image = pygame.image.load(path)
             if name == "mixing_cup":
@@ -89,6 +99,9 @@ class Display:
             elif name == "income":
                 # 调整收入板图像大小
                 self.images[name] = pygame.transform.scale(image, (200, 100))
+            elif name in ["klee", "frieren", "furina", "klee", "nwlt", "violet"]:
+                # 调整顾客图像大小
+                self.images[name] = pygame.transform.scale(image, (300, 300))
             else:
                 self.images[name] = pygame.transform.scale(image, (125, 125))
 
@@ -143,11 +156,12 @@ class Display:
         self.screen.blit(self.background, (0, 0))
         self.draw_ingredients()
         self.draw_mixing_cup()
-        self.draw_customer_order()
         self.draw_redo_button()
         self.draw_income()
         self.draw_state()
         self.draw_quit_button()
+        self.draw_order_queue()  # 绘制订单队列
+        self.draw_current_customer()  # 绘制当前客户信息
         pygame.display.flip()
 
     def draw_ingredients(self):
@@ -165,12 +179,6 @@ class Display:
     def draw_mixing_cup(self):
         pos = self.element_positions['buttons']['mixing_cup']
         self.screen.blit(self.images['mixing_cup'], (pos.x, pos.y))
-
-    def draw_customer_order(self):
-        # 在屏幕上绘制顾客的饮品需求
-        order_text = f"Order: {self.game.customer.order['base_adjective']}, {self.game.customer.order['flavor_adjective']}, {self.game.customer.order['extra_adjective']}"
-        order_surface = self.font.render(order_text, True, (0, 0, 0))
-        self.screen.blit(order_surface, (50, 40))
 
     def draw_redo_button(self):
         pos = self.element_positions['buttons']['redo_button']
@@ -243,3 +251,23 @@ class Display:
         quit_text = self.font.render("退出游戏", True, (168, 128, 79))
         text_rect = quit_text.get_rect(center=pos.center)
         self.screen.blit(quit_text, text_rect)
+
+    def draw_order_queue(self):
+        y_offset = 0
+        for customer in self.game.customers[:5]:  # 只绘制列表中的前5个客户的订单
+            order_text = f"{customer.order['base_adjective']}, {customer.order['flavor_adjective']}, {customer.order['extra_adjective']}"
+            order_surface = self.font.render(order_text, True, (255, 246, 218))
+            self.screen.blit(order_surface, (
+            self.element_positions['order_queue'][0], self.element_positions['order_queue'][1] + y_offset))
+            y_offset += 30  # 每个订单之间的间隔
+
+    def draw_current_customer(self):
+        # 绘制客户照片
+        self.screen.blit(self.images['klee'], self.element_positions['klee'])
+        # 绘制客户订单
+        order_text = f"可莉想要{self.game.customer.order['base_adjective']}的, {self.game.customer.order['flavor_adjective']}的, {self.game.customer.order['extra_adjective']}的饮料！"
+        order_surface = self.font.render(order_text, True, (255, 246, 218))
+        self.screen.blit(order_surface, (
+        self.element_positions['klee'][0] + 50, 50))  # 在照片上方显示订单
+        # TODO: 客户变量
+

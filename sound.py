@@ -19,7 +19,8 @@ class SoundManager:
             "extra_tomato": 'assets/sounds/extra_tomato.wav',
             "flavor_fruit": 'assets/sounds/flavor_fruit.mp3',
             "flavor_gel": 'assets/sounds/flavor_gel.wav',
-            "flavor_mint": 'assets/sounds/flavor_mint.mp3'
+            "flavor_mint": 'assets/sounds/flavor_mint.mp3',
+            "klee": 'assets/sounds/klee.mp3',
         }
 
         for name, path in sound_files.items():
