@@ -26,7 +26,8 @@ class Display:
                 'extra_tomato': (650, 400)
             },
             'status':{
-                'glass_content': (230, 310)
+                'glass_content': (230, 310),
+                'income': (600, 50)
             }
         }
 
@@ -60,10 +61,11 @@ class Display:
             "flavor_mint": 'assets/images/ingredients/flavor_mint.png',
             "extra_milk": 'assets/images/ingredients/extra_milk.png',
             "extra_tomato": 'assets/images/ingredients/extra_tomato.png',
-            # buttons
+            # others
             "mixing_cup": 'assets/images/mixing_cup.png',
             "redo_button": 'assets/images/redo_button.png',
             "glass_content": "assets/images/glass_content.png",
+            "income": "assets/images/income.png",
             # icons
             "icon_base_coffee": 'assets/images/icons/icon_base_coffee.png',
             "icon_base_soda": 'assets/images/icons/icon_base_soda.png',
@@ -83,6 +85,9 @@ class Display:
             elif name.startswith('icon'):
                 # 调整icon图像大小
                 self.images[name] = pygame.transform.scale(image, (30, 30))
+            elif name == "income":
+                # 调整收入板图像大小
+                self.images[name] = pygame.transform.scale(image, (200, 100))
             else:
                 self.images[name] = pygame.transform.scale(image, (125, 125))
 
@@ -176,9 +181,25 @@ class Display:
         self.screen.blit(redo_text, text_rect)
 
     def draw_income(self):
-        income_text = f"Income: {self.game.income}"
-        income_surface = self.font.render(income_text, True, (0, 0, 0))
-        self.screen.blit(income_surface, (50, 60))
+        # 绘制收入板
+        self.screen.blit(self.images['income'], self.element_positions['status']['income'])
+        # 绘制收入文本
+        income_line1 = f"收入"
+        income_line2 = f"{self.game.income} 信用点"
+
+        income_surface1 = self.font.render(income_line1, True, (255, 246, 218))
+        income_text_pos1 = list(self.element_positions['status']['income'])
+        income_text_pos1[0] += 85
+        income_text_pos1[1] += 25
+        income_text_pos1 = tuple(income_text_pos1)
+        self.screen.blit(income_surface1, income_text_pos1)
+
+        income_surface2 = self.font.render(income_line2, True, (255, 246, 218))
+        income_text_pos2 = list(self.element_positions['status']['income'])
+        income_text_pos2[0] += 70
+        income_text_pos2[1] += 56  # 第二行文本的高度为30
+        income_text_pos2 = tuple(income_text_pos2)
+        self.screen.blit(income_surface2, income_text_pos2)
 
     def draw_state(self):
         # 绘制杯子的里的原料
