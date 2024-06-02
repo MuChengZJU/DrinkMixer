@@ -13,7 +13,7 @@ class Display:
         self.element_positions = {
             'buttons': {
                 'quit_button': pygame.Rect(700, 0, 100, 40),
-                'redo_button': pygame.Rect(450, 310, 70, 70),
+                'redo_button': pygame.Rect(450, 320, 70, 70),
                 'mixing_cup': pygame.Rect(300, 280, 175, 175)
             },
             'ingredients': {
