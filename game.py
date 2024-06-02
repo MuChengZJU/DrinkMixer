@@ -8,17 +8,22 @@ class Game:
     def __init__(self):
         self.running = True
         self.income = 0
-        self.customer = Customer()
+        self.customers = []
         self.glass = Glass()
         pygame.display.set_caption("Drink Mixer")  # 设置窗口标题
         self.clock = pygame.time.Clock()  # 创建一个Clock对象
         self.display = Display(self)
-
+        for i in range(10):
+           self.customers.append(Customer())
+        if not hasattr(self, "static_var"):
+           self.customer = self.customers[0]
+           self.i = 0
     def reset_game(self):  # 重置游戏状态
         self.glass = Glass()
-        self.customer = Customer()
+        self.i += 1
+        self.customer = self.customers[self.i]
 
-    def reset_glass(self):  # 重置游戏状态
+    def reset_glass(self):  # 重置杯子状态
         self.glass = Glass()
 
 
