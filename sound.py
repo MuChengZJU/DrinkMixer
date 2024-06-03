@@ -20,7 +20,16 @@ class SoundManager:
             "flavor_fruit": 'assets/sounds/flavor_fruit.mp3',
             "flavor_gel": 'assets/sounds/flavor_gel.wav',
             "flavor_mint": 'assets/sounds/flavor_mint.mp3',
-            "klee": 'assets/sounds/klee.mp3',
+            # character voice
+            'furina_come': 'assets/sounds/furina_come.mp3',
+            'furina_fail': 'assets/sounds/furina_fail.mp3',
+            'furina_succ': 'assets/sounds/furina_succ.mp3',
+            'klee_come': 'assets/sounds/klee_come.ogg',
+            'klee_fail': 'assets/sounds/klee_fail.mp3',
+            'klee_succ': 'assets/sounds/klee_succ.mp3',
+            'nwlt_come': 'assets/sounds/nwlt_come.mp3',
+            'nwlt_fail': 'assets/sounds/nwlt_fail.mp3',
+            'nwlt_succ': 'assets/sounds/nwlt_succ.mp3'
         }
 
         for name, path in sound_files.items():
