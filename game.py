@@ -23,9 +23,9 @@ class Game:
     def reset_game(self):  # 重置游戏状态
         self.glass = Glass()
         self.customers.pop(0)  # 移除已完成的客户
-        self.customers.append(Customer())  # 在列表末尾添加新的客户
+        # self.customers.append(Customer())  # 在列表末尾添加新的客户
         self.customer = self.customers[0]  # 更新当前客户
-        self.sound.play_sound(self.customer.name)  # 在订单刷新时播放"klee"的音效
+        self.sound.play_sound(self.customer.name)  # 在订单刷新时播放的音效
 
 
     def reset_glass(self):  # 重置杯子状态

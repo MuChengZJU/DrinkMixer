@@ -1,6 +1,10 @@
 import pygame
 from pygame.locals import *
 from sound import SoundManager
+
+deep_grey = (168, 128, 79)
+light_grey = (255, 246, 218)
+
 class Display:
     def __init__(self, game):
         self.game = game
@@ -27,7 +31,10 @@ class Display:
             },
             'status':{
                 'glass_content': (230, 310),
-                'income': (600, 50)
+                'income': (600, 50),
+            },
+            'others': {
+                'chat': (-70, -25)
             }
         }
 
@@ -43,7 +50,7 @@ class Display:
         }
 
         # 订单队列和客户
-        self.element_positions['order_queue'] = (600, 200)  # 队列起始位置
+        self.element_positions['order_queue'] = (600, 150)  # 队列起始位置
         self.element_positions['klee'] = (0, 100)  # 客户照片位置
 
     def load_assets(self):
@@ -70,6 +77,7 @@ class Display:
             "redo_button": 'assets/images/redo_button.png',
             "glass_content": "assets/images/glass_content.png",
             "income": "assets/images/income.png",
+            "chat": "assets/images/chat.png",
             # icons
             "icon_base_coffee": 'assets/images/icons/icon_base_coffee.png',
             "icon_base_soda": 'assets/images/icons/icon_base_soda.png',
@@ -79,7 +87,7 @@ class Display:
             "icon_extra_milk": 'assets/images/icons/icon_extra_milk.png',
             "icon_extra_tomato": 'assets/images/icons/icon_extra_tomato.png',
             # customers
-            "klee": "assets/images/customers/klee.png",
+            "anya": "assets/images/customers/anya.png",
             "frieren": "assets/images/customers/frieren.png",
             "furina": "assets/images/customers/furina.png",
             "klee": "assets/images/customers/klee.png",
@@ -99,9 +107,12 @@ class Display:
             elif name == "income":
                 # 调整收入板图像大小
                 self.images[name] = pygame.transform.scale(image, (200, 100))
-            elif name in ["klee", "frieren", "furina", "klee", "nwlt", "violet"]:
+            elif name in ["anya", "frieren", "furina", "klee", "nwlt", "violet"]:
                 # 调整顾客图像大小
                 self.images[name] = pygame.transform.scale(image, (300, 300))
+            elif name == "chat":
+                # 调整聊天图像大小
+                self.images[name] = pygame.transform.scale(image, (800, 180))
             else:
                 self.images[name] = pygame.transform.scale(image, (125, 125))
 
@@ -183,10 +194,10 @@ class Display:
     def draw_redo_button(self):
         pos = self.element_positions['buttons']['redo_button']
         self.screen.blit(self.images['redo_button'], (pos.x, pos.y))
-        redo_text = self.font.render("重做这杯", True, (168, 128, 79))
+        redo_text = self.font.render("重做这杯", True, deep_grey)
         text_rect = redo_text.get_rect(center=(pos.centerx, pos.centery + pos.height / 2))
         self.screen.blit(redo_text, text_rect)
-        redo_text = self.font.render("重做这杯", True, (255, 246, 218))
+        redo_text = self.font.render("重做这杯", True, light_grey)
         text_rect.x -= 2
         text_rect.y -= 2
         self.screen.blit(redo_text, text_rect)
@@ -198,14 +209,14 @@ class Display:
         income_line1 = f"收入"
         income_line2 = f"{self.game.income} 信用点"
 
-        income_surface1 = self.font.render(income_line1, True, (255, 246, 218))
+        income_surface1 = self.font.render(income_line1, True, light_grey)
         income_text_pos1 = list(self.element_positions['status']['income'])
         income_text_pos1[0] += 85
         income_text_pos1[1] += 25
         income_text_pos1 = tuple(income_text_pos1)
         self.screen.blit(income_surface1, income_text_pos1)
 
-        income_surface2 = self.font.render(income_line2, True, (255, 246, 218))
+        income_surface2 = self.font.render(income_line2, True, light_grey)
         income_text_pos2 = list(self.element_positions['status']['income'])
         income_text_pos2[0] += 70
         income_text_pos2[1] += 56  # 第二行文本的高度为30
@@ -247,27 +258,37 @@ class Display:
 
     def draw_quit_button(self):
         pos = self.element_positions['buttons']['quit_button']
-        pygame.draw.rect(self.screen, (255, 246, 218), pos)
-        quit_text = self.font.render("退出游戏", True, (168, 128, 79))
+        pygame.draw.rect(self.screen, light_grey, pos)
+        quit_text = self.font.render("退出游戏", True, deep_grey)
         text_rect = quit_text.get_rect(center=pos.center)
         self.screen.blit(quit_text, text_rect)
 
     def draw_order_queue(self):
-        y_offset = 0
-        for customer in self.game.customers[:5]:  # 只绘制列表中的前5个客户的订单
-            order_text = f"{customer.order['base_adjective']}, {customer.order['flavor_adjective']}, {customer.order['extra_adjective']}"
-            order_surface = self.font.render(order_text, True, (255, 246, 218))
-            self.screen.blit(order_surface, (
-            self.element_positions['order_queue'][0], self.element_positions['order_queue'][1] + y_offset))
-            y_offset += 30  # 每个订单之间的间隔
+        x_offset_1 = 130
+        x_offset_2 = 40
+        order_remaining_text = self.font.render("剩余订单", True, deep_grey)
+        customer_count_text = self.font.render(str(len(self.game.customers)), True, deep_grey)
+        self.screen.blit(customer_count_text, (self.element_positions['order_queue'][0] + x_offset_1, self.element_positions['order_queue'][1]))
+        self.screen.blit(order_remaining_text, (self.element_positions['order_queue'][0] + x_offset_2, self.element_positions['order_queue'][1]))
+        order_remaining_text = self.font.render("剩余订单", True, light_grey)
+        customer_count_text = self.font.render(str(len(self.game.customers)), True, light_grey)
+        self.screen.blit(customer_count_text, (
+        self.element_positions['order_queue'][0] + x_offset_1 - 2, self.element_positions['order_queue'][1] - 2))
+        self.screen.blit(order_remaining_text, (
+        self.element_positions['order_queue'][0] + x_offset_2 - 2, self.element_positions['order_queue'][1] - 2))
 
     def draw_current_customer(self):
         # 绘制客户照片
-        self.screen.blit(self.images['klee'], self.element_positions['klee'])
+        self.screen.blit(self.images[self.game.customer.name], self.element_positions['klee']) # 客户照片的坐标都是一样的，所以用klee代替
+        # 聊天框
+        self.screen.blit(self.images['chat'], self.element_positions['others']['chat'])
         # 绘制客户订单
-        order_text = f"可莉想要{self.game.customer.order['base_adjective']}的, {self.game.customer.order['flavor_adjective']}的, {self.game.customer.order['extra_adjective']}的饮料！"
-        order_surface = self.font.render(order_text, True, (255, 246, 218))
+        order_text = f"{self.game.customer.namelist_cn[self.game.customer.name]}想要{self.game.customer.order['base_adjective']}的, {self.game.customer.order['flavor_adjective']}的, {self.game.customer.order['extra_adjective']}的饮料！"
+        order_surface = self.font.render(order_text, True, deep_grey)
         self.screen.blit(order_surface, (
         self.element_positions['klee'][0] + 50, 50))  # 在照片上方显示订单
-        # TODO: 客户变量
 
+        order_text = f"{self.game.customer.namelist_cn[self.game.customer.name]}想要{self.game.customer.order['base_adjective']}的, {self.game.customer.order['flavor_adjective']}的, {self.game.customer.order['extra_adjective']}的饮料！"
+        order_surface = self.font.render(order_text, True, light_grey)
+        self.screen.blit(order_surface, (
+            self.element_positions['klee'][0] + 50 - 2, 50 - 2))  # 阴影

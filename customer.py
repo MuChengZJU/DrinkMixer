@@ -4,21 +4,29 @@ class Customer:
     def __init__(self):
         self.ingredients = {
             "base": {
-                "base_coffee": ["香浓", "苦味", "提神", "醇厚"],
-                "base_soda": ["清新", "爽口", "刺激", "解渴", "轻盈"]
+                "base_coffee": ["香浓醇厚", "苦味提神"],
+                "base_soda": ["清新爽口", "刺激轻盈"]
             },
             "flavor": {
-                "flavor_fruit": ["多汁",  "果香", "新鲜", "营养丰富"],
-                "flavor_gel": ["软滑", "粘性", "弹性", "有趣", "多彩"],
-                "flavor_mint": ["清凉", "提神", "清新", "舒缓", "带有轻微的辛辣感"]
+                "flavor_fruit": ["多汁果香", "新鲜营养"],
+                "flavor_gel": ["软滑粘性", "弹性有趣"],
+                "flavor_mint": ["清凉提神", "清新辛辣"]
             },
             "extra": {
-                "extra_milk": [ "香甜", "顺滑", "营养丰富", "奶香"],
-                "extra_tomato": ["酸甜浓郁", "粘稠", "奇特创新"]
+                "extra_milk": ["香甜顺滑", "营养奶香"],
+                "extra_tomato": ["酸甜浓郁", "粘稠奇特"]
             }
         }
         self.namelist = {
             "anya", "frieren", "furina", "klee", "nwlt", "violet"
+        }
+        self.namelist_cn = {
+            'anya': '阿尼亚',
+            'frieren': '芙莉莲',
+            'furina': '芙宁娜',
+            'klee': '可莉',
+            'nwlt': '那维莱特',
+            'violet': '薇鹅莉特'
         }
         self.name = self.generate_name()
         self.order = self.generate_order()
@@ -32,11 +40,6 @@ class Customer:
                 "flavor": "flavor_fruit",
                 "extra": "extra_milk"
             }
-        # order = {
-        #     "base": random.choice(list(self.ingredients["base"].keys())),
-        #     "flavor": random.choice(list(self.ingredients["flavor"].keys())),
-        #     "extra": random.choice(list(self.ingredients["extra"].keys()))
-        # }
         if (self.name == "frieren"):
             order = {
                 "base": "base_coffee",
