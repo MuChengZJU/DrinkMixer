@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from sound import SoundManager
+import pygame.time
 
 deep_grey = (168, 128, 79)
 light_grey = (255, 246, 218)
@@ -12,6 +13,8 @@ class Display:
         self.load_assets()
         self.font = pygame.font.Font('assets/fonts/HYWenHei-85W.ttf', 20)
         self.sound = SoundManager()
+        self.check_result = None # 用于显示配方检查结果
+        self.check_result_timer = None
 
         # 定义所有可交互元素的位置
         self.element_positions = {
@@ -140,9 +143,13 @@ class Display:
         # 检查点击是否在杯子上
         elif self.element_positions['buttons']['mixing_cup'].collidepoint(x, y):
             if self.game.check_order():
+                self.check_result = 'success'
                 self.game.reset_game()
             else:
+                self.check_result = 'fail'
                 self.game.glass.clear()
+            self.check_result_timer = pygame.time.get_ticks()  # 设置计时器
+            self.render()
 
     def is_click_on_ingredient(self, x, y):
         # 用集中管理的原料位置来检查点击是否在某个原料图标上
@@ -173,6 +180,18 @@ class Display:
         self.draw_quit_button()
         self.draw_order_queue()  # 绘制订单队列
         self.draw_current_customer()  # 绘制当前客户信息
+        # 绘制配方检查结果
+        if self.check_result_timer is not None:
+            elapsed_time = pygame.time.get_ticks() - self.check_result_timer
+            if elapsed_time < 2000:  # 2秒内
+                alpha = int(255 * (1 - elapsed_time / 2000))  # 计算透明度
+                if self.check_result == 'success':
+                    self.draw_check_succ(alpha)
+                elif self.check_result == 'fail':
+                    self.draw_check_fail(alpha)
+            else:
+                self.check_result_timer = None  # 清除计时器
+
         pygame.display.flip()
 
     def draw_ingredients(self):
@@ -292,3 +311,24 @@ class Display:
         order_surface = self.font.render(order_text, True, light_grey)
         self.screen.blit(order_surface, (
             self.element_positions['klee'][0] + 50 - 2, 50 - 2))  # 阴影
+
+    def draw_check_text_with_shadow(self, message, alpha, color, shadow_color, offset=(2, 2)):
+        # 创建原始文本
+        text_surface = self.font.render(message, True, color)
+        text_surface.set_alpha(alpha)
+        text_rect = text_surface.get_rect(center=(395, 270))
+
+        # 创建阴影文本
+        shadow_surface = self.font.render(message, True, shadow_color)
+        shadow_surface.set_alpha(alpha)
+        shadow_rect = shadow_surface.get_rect(center=(395 + offset[0], 270 + offset[1]))
+
+        # 先绘制阴影，再绘制原始文本
+        self.screen.blit(shadow_surface, shadow_rect)
+        self.screen.blit(text_surface, text_rect)
+
+    def draw_check_succ(self, alpha):
+        self.draw_check_text_with_shadow("配方正确！", alpha, light_grey, deep_grey)
+
+    def draw_check_fail(self, alpha):
+        self.draw_check_text_with_shadow("配方错误！", alpha, light_grey, deep_grey)
