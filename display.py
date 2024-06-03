@@ -53,7 +53,7 @@ class Display:
         }
 
         # 订单队列和客户
-        self.element_positions['order_queue'] = (600, 150)  # 队列起始位置
+        self.element_positions['order_queue'] = (610, 80)  # 队列起始位置
         self.element_positions['klee'] = (0, 100)  # 客户照片位置
 
     def load_assets(self):
@@ -225,22 +225,13 @@ class Display:
         # 绘制收入板
         self.screen.blit(self.images['income'], self.element_positions['status']['income'])
         # 绘制收入文本
-        income_line1 = f"收入"
-        income_line2 = f"{self.game.income} 信用点"
-
+        income_line1 = f"收入 {self.game.income}"
         income_surface1 = self.font.render(income_line1, True, light_grey)
         income_text_pos1 = list(self.element_positions['status']['income'])
-        income_text_pos1[0] += 85
-        income_text_pos1[1] += 25
+        income_text_pos1[0] += 65
+        income_text_pos1[1] += 57
         income_text_pos1 = tuple(income_text_pos1)
         self.screen.blit(income_surface1, income_text_pos1)
-
-        income_surface2 = self.font.render(income_line2, True, light_grey)
-        income_text_pos2 = list(self.element_positions['status']['income'])
-        income_text_pos2[0] += 70
-        income_text_pos2[1] += 56  # 第二行文本的高度为30
-        income_text_pos2 = tuple(income_text_pos2)
-        self.screen.blit(income_surface2, income_text_pos2)
 
     def draw_state(self):
         # 绘制杯子的里的原料
