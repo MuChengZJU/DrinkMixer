@@ -3,6 +3,7 @@ from customer import Customer
 from glass import Glass
 from sound import SoundManager
 from display import Display
+import time
 
 
 class Game:
@@ -24,6 +25,7 @@ class Game:
         self.glass = Glass()
         self.customers.pop(0)  # 移除已完成的客户
         # self.customers.append(Customer())  # 在列表末尾添加新的客户
+        time.sleep(5)
         self.customer = self.customers[0]  # 更新当前客户
         self.sound.play_sound(self.customer.name + "_come")  # 在订单刷新时播放的音效
 
