@@ -29,7 +29,16 @@ class SoundManager:
             'klee_succ': 'assets/sounds/klee_succ.mp3',
             'nwlt_come': 'assets/sounds/nwlt_come.mp3',
             'nwlt_fail': 'assets/sounds/nwlt_fail.mp3',
-            'nwlt_succ': 'assets/sounds/nwlt_succ.mp3'
+            'nwlt_succ': 'assets/sounds/nwlt_succ.mp3',
+            'anya_come': 'assets/sounds/anya_come.mp3',
+            'anya_fail': 'assets/sounds/anya_fail.mp3',
+            'anya_succ': 'assets/sounds/anya_succ.mp3',
+            'violet_come': 'assets/sounds/violet_come.mp3',
+            'violet_fail': 'assets/sounds/violet_fail.mp3',
+            'violet_succ': 'assets/sounds/violet_succ.mp3',
+            'frieren_come': 'assets/sounds/frieren_come.mp3',
+            'frieren_fail': 'assets/sounds/frieren_fail.mp3',
+            'frieren_succ': 'assets/sounds/frieren_succ.mp3',
         }
 
         for name, path in sound_files.items():

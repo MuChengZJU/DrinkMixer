@@ -1,5 +1,6 @@
 import random
 
+
 class Customer:
     def __init__(self):
         self.ingredients = {
@@ -32,9 +33,8 @@ class Customer:
         self.order = self.generate_order()
         self.price = self.calculate_price()
 
-
     def generate_order(self):
-        if(self.name=="anya"):
+        if (self.name == "anya"):
             order = {
                 "base": "base_coffee",
                 "flavor": "flavor_fruit",
@@ -75,16 +75,25 @@ class Customer:
         order["flavor_adjective"] = random.choice(self.ingredients["flavor"][order["flavor"]])
         order["extra_adjective"] = random.choice(self.ingredients["extra"][order["extra"]])
         return order
+
     def generate_name(self):
         name = random.choice(list(self.namelist))
         return name
+
     def calculate_price(self):
         price = 0
-        if self.order["base"] == "base_coffee":price += 5
-        elif self.order["base"]=="base_soda":price += 4
-        if self.order["flavor"]=="flavor_fruit": price += 5
-        elif self.order["flavor"]=="flavor_gel": price += 3
-        else: price += 2
-        if self.order["extra"]=="extra_milk":price += 1;
-        else: price += 2
+        if self.order["base"] == "base_coffee":
+            price += 5
+        elif self.order["base"] == "base_soda":
+            price += 4
+        if self.order["flavor"] == "flavor_fruit":
+            price += 5
+        elif self.order["flavor"] == "flavor_gel":
+            price += 3
+        else:
+            price += 2
+        if self.order["extra"] == "extra_milk":
+            price += 1;
+        else:
+            price += 2
         return price;
