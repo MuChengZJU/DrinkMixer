@@ -149,7 +149,7 @@ class Display:
                 self.check_result = 'fail'
                 self.game.glass.clear()
             self.check_result_timer = pygame.time.get_ticks()  # 设置计时器
-            self.render()
+        self.render()
 
     def is_click_on_ingredient(self, x, y):
         # 用集中管理的原料位置来检查点击是否在某个原料图标上
