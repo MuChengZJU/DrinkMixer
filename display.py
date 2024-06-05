@@ -6,6 +6,7 @@ import pygame.time
 deep_grey = (168, 128, 79)
 light_grey = (255, 246, 218)
 
+
 class Display:
     def __init__(self, game):
         self.game = game
@@ -13,7 +14,7 @@ class Display:
         self.load_assets()
         self.font = pygame.font.Font('assets/fonts/HYWenHei-85W.ttf', 20)
         self.sound = SoundManager()
-        self.check_result = None # 用于显示配方检查结果
+        self.check_result = None  # 用于显示配方检查结果
         self.check_result_timer = None
 
         # 定义所有可交互元素的位置
@@ -32,7 +33,7 @@ class Display:
                 'extra_milk': (550, 400),
                 'extra_tomato': (650, 400)
             },
-            'status':{
+            'status': {
                 'glass_content': (230, 310),
                 'income': (600, 50),
             },
@@ -278,25 +279,27 @@ class Display:
         x_offset_2 = 40
         order_remaining_text = self.font.render("剩余订单", True, deep_grey)
         customer_count_text = self.font.render(str(len(self.game.customers)), True, deep_grey)
-        self.screen.blit(customer_count_text, (self.element_positions['order_queue'][0] + x_offset_1, self.element_positions['order_queue'][1]))
-        self.screen.blit(order_remaining_text, (self.element_positions['order_queue'][0] + x_offset_2, self.element_positions['order_queue'][1]))
+        self.screen.blit(customer_count_text, (
+        self.element_positions['order_queue'][0] + x_offset_1, self.element_positions['order_queue'][1]))
+        self.screen.blit(order_remaining_text, (
+        self.element_positions['order_queue'][0] + x_offset_2, self.element_positions['order_queue'][1]))
         order_remaining_text = self.font.render("剩余订单", True, light_grey)
         customer_count_text = self.font.render(str(len(self.game.customers)), True, light_grey)
         self.screen.blit(customer_count_text, (
-        self.element_positions['order_queue'][0] + x_offset_1 - 2, self.element_positions['order_queue'][1] - 2))
+            self.element_positions['order_queue'][0] + x_offset_1 - 2, self.element_positions['order_queue'][1] - 2))
         self.screen.blit(order_remaining_text, (
-        self.element_positions['order_queue'][0] + x_offset_2 - 2, self.element_positions['order_queue'][1] - 2))
+            self.element_positions['order_queue'][0] + x_offset_2 - 2, self.element_positions['order_queue'][1] - 2))
 
     def draw_current_customer(self):
         # 绘制客户照片
-        self.screen.blit(self.images[self.game.customer.name], self.element_positions['klee']) # 客户照片的坐标都是一样的，所以用klee代替
+        self.screen.blit(self.images[self.game.customer.name], self.element_positions['klee'])  # 客户照片的坐标都是一样的，所以用klee代替
         # 聊天框
         self.screen.blit(self.images['chat'], self.element_positions['others']['chat'])
         # 绘制客户订单
-        order_text = f"{self.game.customer.namelist_cn[self.game.customer.name]}想要{self.game.customer.order['base_adjective']}的, {self.game.customer.order['flavor_adjective']}的, {self.game.customer.order['extra_adjective']}的饮料！"
+        order_text = f"{self.game.customer.namelist_cn[self.game.customer.name]}想要{self.game.customer.order["base_adjective"]}的, {self.game.customer.order['flavor_adjective']}的, {self.game.customer.order['extra_adjective']}的饮料！"
         order_surface = self.font.render(order_text, True, deep_grey)
         self.screen.blit(order_surface, (
-        self.element_positions['klee'][0] + 50, 50))  # 在照片上方显示订单
+            self.element_positions['klee'][0] + 50, 50))  # 在照片上方显示订单
 
         order_text = f"{self.game.customer.namelist_cn[self.game.customer.name]}想要{self.game.customer.order['base_adjective']}的, {self.game.customer.order['flavor_adjective']}的, {self.game.customer.order['extra_adjective']}的饮料！"
         order_surface = self.font.render(order_text, True, light_grey)

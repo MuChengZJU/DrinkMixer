@@ -1,6 +1,7 @@
 import pygame
 from game import Game  # 从game.py里面引用class Game？
 
+
 def main():
     # 初始化 Pygame 使用pygame之前必须执行的步骤。
     pygame.init()
@@ -12,5 +13,7 @@ def main():
     game.run()
 
     # 如果当前脚本是作为主程序运行的，那么调用main函数，从而启动游戏
+
+
 if __name__ == "__main__":
     main()
