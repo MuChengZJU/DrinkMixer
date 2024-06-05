@@ -1,3 +1,6 @@
+## @file display.py
+#  @brief 包含 Display 类，负责游戏的界面显示和用户交互。
+
 import pygame
 from pygame.locals import *
 from sound import SoundManager
@@ -8,6 +11,9 @@ light_grey = (255, 246, 218)
 
 
 class Display:
+    ## @brief 初始化 Display 对象。
+    #  设置窗口、加载资源并定义交互元素的位置。
+    #  @param game Game 对象的实例。
     def __init__(self, game):
         self.game = game
         self.screen = pygame.display.set_mode((800, 600))
@@ -57,6 +63,7 @@ class Display:
         self.element_positions['order_queue'] = (610, 80)  # 队列起始位置
         self.element_positions['klee'] = (0, 100)  # 客户照片位置
 
+    ## @brief 加载游戏所需的图像资源。
     def load_assets(self):
         self.images = {}
 
@@ -100,13 +107,13 @@ class Display:
         }.items():
             image = pygame.image.load(path)
             if name == "mixing_cup":
-                # 调整mixing_cup图像大小
+                # 调整 mixing_cup 图像大小
                 self.images[name] = pygame.transform.scale(image, (175, 175))
             elif name == "redo_button":
-                # 调整redo_button图像大小
+                # 调整 redo_button 图像大小
                 self.images[name] = pygame.transform.scale(image, (60, 60))
             elif name.startswith('icon'):
-                # 调整icon图像大小
+                # 调整 icon 图像大小
                 self.images[name] = pygame.transform.scale(image, (30, 30))
             elif name == "income":
                 # 调整收入板图像大小
@@ -120,6 +127,7 @@ class Display:
             else:
                 self.images[name] = pygame.transform.scale(image, (125, 125))
 
+    ## @brief 处理用户输入事件。
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -127,6 +135,8 @@ class Display:
             elif event.type == MOUSEBUTTONDOWN:
                 self.handle_click(event.pos)
 
+    ## @brief 处理用户点击事件。
+    #  @param pos 鼠标点击位置。
     def handle_click(self, pos):
         x, y = pos
         # 检查点击是否在退出按钮上
@@ -152,6 +162,10 @@ class Display:
             self.check_result_timer = pygame.time.get_ticks()  # 设置计时器
         self.render()
 
+    ## @brief 判断点击是否在某个原料图标上。
+    #  @param x 点击位置的 x 坐标。
+    #  @param y 点击位置的 y 坐标。
+    #  @return 如果点击在原料图标上，返回 True，否则返回 False。
     def is_click_on_ingredient(self, x, y):
         # 用集中管理的原料位置来检查点击是否在某个原料图标上
         for name, (ix, iy) in self.element_positions['ingredients'].items():
@@ -159,17 +173,22 @@ class Display:
                 return True
         return False
 
+    ## @brief 根据点击位置返回相应的原料信息。
+    #  @param x 点击位置的 x 坐标。
+    #  @param y 点击位置的 y 坐标。
+    #  @return 包含原料类型和名称的字典。
     def get_clicked_ingredient(self, x, y):
-        # 根据点击的位置返回相应的原料信息
         for name, (ix, iy) in self.element_positions['ingredients'].items():
             if ix <= x <= ix + 125 and iy <= y <= iy + 125:
                 type_ = 'base' if 'base' in name else 'flavor' if 'flavor' in name else 'extra'
                 return {'type': type_, 'name': name}
         return None
 
+    ## @brief 更新显示内容（暂未实现）。
     def update(self):
         pass
 
+    ## @brief 渲染游戏界面。
     def render(self):
         self.screen.fill((255, 255, 255))
         self.screen.blit(self.background, (0, 0))
@@ -184,7 +203,7 @@ class Display:
         # 绘制配方检查结果
         if self.check_result_timer is not None:
             elapsed_time = pygame.time.get_ticks() - self.check_result_timer
-            if elapsed_time < 2000:  # 2秒内
+            if (elapsed_time < 2000):  # 2秒内
                 alpha = int(255 * (1 - elapsed_time / 2000))  # 计算透明度
                 if self.check_result == 'success':
                     self.draw_check_succ(alpha)
@@ -195,8 +214,8 @@ class Display:
 
         pygame.display.flip()
 
+    ## @brief 绘制可选择的原料及其名称。
     def draw_ingredients(self):
-        # 在屏幕上绘制可选择的原料及其名称
         for name, (ix, iy) in self.element_positions['ingredients'].items():
             # 绘制原料图标
             self.screen.blit(self.images[name], (ix, iy))
@@ -207,10 +226,12 @@ class Display:
             label_rect = label_surface.get_rect(center=(ix + 62.5, 550))  # 图标中心下方
             self.screen.blit(label_surface, label_rect)
 
+    ## @brief 绘制混合杯。
     def draw_mixing_cup(self):
         pos = self.element_positions['buttons']['mixing_cup']
         self.screen.blit(self.images['mixing_cup'], (pos.x, pos.y))
 
+    ## @brief 绘制重置按钮。
     def draw_redo_button(self):
         pos = self.element_positions['buttons']['redo_button']
         self.screen.blit(self.images['redo_button'], (pos.x, pos.y))
@@ -222,10 +243,9 @@ class Display:
         text_rect.y -= 2
         self.screen.blit(redo_text, text_rect)
 
+    ## @brief 绘制收入信息。
     def draw_income(self):
-        # 绘制收入板
         self.screen.blit(self.images['income'], self.element_positions['status']['income'])
-        # 绘制收入文本
         income_line1 = f"收入 {self.game.income}"
         income_surface1 = self.font.render(income_line1, True, light_grey)
         income_text_pos1 = list(self.element_positions['status']['income'])
@@ -234,8 +254,8 @@ class Display:
         income_text_pos1 = tuple(income_text_pos1)
         self.screen.blit(income_surface1, income_text_pos1)
 
+    ## @brief 绘制当前杯子的原料状态。
     def draw_state(self):
-        # 绘制杯子的里的原料
         self.screen.blit(self.images['glass_content'], self.element_positions['status']['glass_content'])
         if self.game.glass.contents['base'] is not None:
             base_pos = list(self.element_positions['status']['glass_content'])
@@ -267,6 +287,7 @@ class Display:
             elif self.game.glass.contents['extra'] == 'extra_tomato':
                 self.screen.blit(self.images['icon_extra_tomato'], extra_pos)
 
+    ## @brief 绘制退出按钮。
     def draw_quit_button(self):
         pos = self.element_positions['buttons']['quit_button']
         pygame.draw.rect(self.screen, light_grey, pos)
@@ -274,29 +295,34 @@ class Display:
         text_rect = quit_text.get_rect(center=pos.center)
         self.screen.blit(quit_text, text_rect)
 
+        ## @brief 绘制订单队列。
     def draw_order_queue(self):
         x_offset_1 = 130
         x_offset_2 = 40
         order_remaining_text = self.font.render("剩余订单", True, deep_grey)
         customer_count_text = self.font.render(str(len(self.game.customers)), True, deep_grey)
         self.screen.blit(customer_count_text, (
-        self.element_positions['order_queue'][0] + x_offset_1, self.element_positions['order_queue'][1]))
+            self.element_positions['order_queue'][0] + x_offset_1, self.element_positions['order_queue'][1]))
         self.screen.blit(order_remaining_text, (
-        self.element_positions['order_queue'][0] + x_offset_2, self.element_positions['order_queue'][1]))
+            self.element_positions['order_queue'][0] + x_offset_2, self.element_positions['order_queue'][1]))
         order_remaining_text = self.font.render("剩余订单", True, light_grey)
         customer_count_text = self.font.render(str(len(self.game.customers)), True, light_grey)
         self.screen.blit(customer_count_text, (
-            self.element_positions['order_queue'][0] + x_offset_1 - 2, self.element_positions['order_queue'][1] - 2))
+            self.element_positions['order_queue'][0] + x_offset_1 - 2,
+            self.element_positions['order_queue'][1] - 2))
         self.screen.blit(order_remaining_text, (
-            self.element_positions['order_queue'][0] + x_offset_2 - 2, self.element_positions['order_queue'][1] - 2))
+            self.element_positions['order_queue'][0] + x_offset_2 - 2,
+            self.element_positions['order_queue'][1] - 2))
 
+    ## @brief 绘制当前客户信息。
     def draw_current_customer(self):
         # 绘制客户照片
-        self.screen.blit(self.images[self.game.customer.name], self.element_positions['klee'])  # 客户照片的坐标都是一样的，所以用klee代替
+        self.screen.blit(self.images[self.game.customer.name],
+                         self.element_positions['klee'])  # 客户照片的坐标都是一样的，所以用 klee 代替
         # 聊天框
         self.screen.blit(self.images['chat'], self.element_positions['others']['chat'])
         # 绘制客户订单
-        order_text = f"{self.game.customer.namelist_cn[self.game.customer.name]}想要{self.game.customer.order["base_adjective"]}的, {self.game.customer.order['flavor_adjective']}的, {self.game.customer.order['extra_adjective']}的饮料！"
+        order_text = f"{self.game.customer.namelist_cn[self.game.customer.name]}想要{self.game.customer.order['base_adjective']}的, {self.game.customer.order['flavor_adjective']}的, {self.game.customer.order['extra_adjective']}的饮料！"
         order_surface = self.font.render(order_text, True, deep_grey)
         self.screen.blit(order_surface, (
             self.element_positions['klee'][0] + 50, 50))  # 在照片上方显示订单
@@ -306,6 +332,12 @@ class Display:
         self.screen.blit(order_surface, (
             self.element_positions['klee'][0] + 50 - 2, 50 - 2))  # 阴影
 
+    ## @brief 绘制带阴影的文本信息。
+    #  @param message 要显示的信息。
+    #  @param alpha 透明度。
+    #  @param color 文本颜色。
+    #  @param shadow_color 阴影颜色。
+    #  @param offset 阴影偏移量。
     def draw_check_text_with_shadow(self, message, alpha, color, shadow_color, offset=(2, 2)):
         # 创建原始文本
         text_surface = self.font.render(message, True, color)
@@ -321,8 +353,12 @@ class Display:
         self.screen.blit(shadow_surface, shadow_rect)
         self.screen.blit(text_surface, text_rect)
 
+    ## @brief 绘制配方正确时的提示信息。
+    #  @param alpha 透明度。
     def draw_check_succ(self, alpha):
         self.draw_check_text_with_shadow("配方正确！", alpha, light_grey, deep_grey)
 
+    ## @brief 绘制配方错误时的提示信息。
+    #  @param alpha 透明度。
     def draw_check_fail(self, alpha):
         self.draw_check_text_with_shadow("配方错误！", alpha, light_grey, deep_grey)

@@ -1,7 +1,12 @@
+## @file customer.py
+#  @brief 包含 Customer 类，用于生成客户和其订单。
+
 import random
 
 
 class Customer:
+    ## @brief 初始化 Customer 对象。
+    #  生成客户名称、订单和价格。
     def __init__(self):
         self.ingredients = {
             "base": {
@@ -33,6 +38,8 @@ class Customer:
         self.order = self.generate_order()
         self.price = self.calculate_price()
 
+    ## @brief 生成客户订单。
+    #  @return 包含基底、口味和额外原料的订单字典。
     def generate_order(self):
         if (self.name == "anya"):
             order = {
@@ -76,10 +83,14 @@ class Customer:
         order["extra_adjective"] = random.choice(self.ingredients["extra"][order["extra"]])
         return order
 
+    ## @brief 生成客户名称。
+    #  @return 客户名称。
     def generate_name(self):
         name = random.choice(list(self.namelist))
         return name
 
+    ## @brief 计算订单价格。
+    #  @return 订单价格。
     def calculate_price(self):
         price = 0
         if self.order["base"] == "base_coffee":
@@ -93,7 +104,7 @@ class Customer:
         else:
             price += 2
         if self.order["extra"] == "extra_milk":
-            price += 1;
+            price += 1
         else:
             price += 2
-        return price;
+        return price

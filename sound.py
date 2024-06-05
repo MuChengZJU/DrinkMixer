@@ -1,6 +1,12 @@
+## @file sound.py
+#  @brief 包含 SoundManager 类，负责加载和播放游戏的音效和背景音乐。
+
 import pygame
 
+
 class SoundManager:
+    ## @brief 初始化 SoundManager 对象。
+    #  初始化音频系统并加载音效文件和背景音乐。
     def __init__(self):
         pygame.mixer.init()
         self.sounds = {}
@@ -11,6 +17,7 @@ class SoundManager:
         # 加载并播放背景音乐
         self.play_background_music('assets/sounds/background_music.mp3')
 
+    ## @brief 加载所有音效文件。
     def load_sounds(self):
         sound_files = {
             "base_coffee": 'assets/sounds/base_coffee.wav',
@@ -45,10 +52,14 @@ class SoundManager:
             sound = pygame.mixer.Sound(path)
             self.sounds[name] = sound
 
+    ## @brief 播放指定名称的音效。
+    #  @param name 音效名称。
     def play_sound(self, name):
         if name in self.sounds:
             self.sounds[name].play()
 
+    ## @brief 播放背景音乐。
+    #  @param path 背景音乐文件路径。
     def play_background_music(self, path):
         pygame.mixer.music.load(path)
         pygame.mixer.music.play(-1)  # -1 表示无限循环播放
