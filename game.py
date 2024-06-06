@@ -18,7 +18,7 @@ class Game:
         self.income = 0
         self.customers = []
         self.glass = Glass()
-        pygame.display.set_caption("Drink Mixer")  # 设置窗口标题
+        pygame.display.set_caption("求是创新奶茶店")  # 设置窗口标题
         self.clock = pygame.time.Clock()  # 创建一个 Clock 对象
         self.display = Display(self)
         for i in range(10):
